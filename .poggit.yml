@@ -1,0 +1,12 @@
+--- # Poggit-CI Manifest. Open the CI at https://poggit.pmmp.io/ci/Invy55/FakePlayerLag
+build-by-default: true
+branches:
+- master
+projects:
+  FakePlayerLag:
+    path: ""
+    icon: "icon.png"
+    libs:
+      - src: jojoe77777/FormAPI/libFormAPI
+        version: ^1.3
+...
