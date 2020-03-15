@@ -1,3 +1,5 @@
+[![](https://poggit.pmmp.io/shield.state/FakePlayerLag)](https://poggit.pmmp.io/p/FakePlayerLag)
+
 # FakePlayerLag
 
 This plugin permits to all the admins in your server that have access to the main command (Watch below for more information) to troll all the players on the server by making a percentual of their packets ignored.
