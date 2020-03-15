@@ -1,0 +1,12 @@
+name: FakePlayerLag
+version: 0.1.0
+main: Invy55\FakePlayerLag\Main
+api: 3.0.0
+
+commands:
+ fpl:
+  description: Get the FPL Stick
+  permission: FakePlayerLag.command.fpl
+permissions:
+ FakePlayerLag.command.fpl:
+  default: op
