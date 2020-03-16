@@ -49,16 +49,12 @@ class Main extends PluginBase implements Listener{
         
 	}
     public function onJoin(PlayerJoinEvent $event){
-        $player = $event->getPlayer();
-        $this->$player = new \stdClass();
-        //All attributes set here
-        $this->$player->moveLag = 0;
-        $this->$player->placeLag = 0;
-        $this->$player->breakLag = 0;
+        $player = $event->getPlayer()->getName();
+        self::setAsDefault($player);
     }
 
     public function onQuit(PlayerQuitEvent $event){
-        $player = $event->getPlayer();
+        $player = $event->getPlayer()->getName();
         unset($this->$player);
     }
 
@@ -75,7 +71,8 @@ class Main extends PluginBase implements Listener{
     }
 
     public function onPlayerMove(PlayerMoveEvent $event) {
-        $player = $event->getPlayer();
+        $player = $event->getPlayer()->getName();
+        if(!isset($this->$player)) self::setAsDefault($player);
         if(isset($this->$player->latestMove)) $passed = microtime(true) - $this->$player->latestMove; else{ $this->$player->latestMove = microtime(true); $passed = 1;}
         if($this->$player->moveLag > 0 and ($passed >= 1.00/($this->$player->moveLag/10)+mt_rand(10,30)/100 or $this->$player->moveLag == 100)){
             if(self::randomizer($this->$player->moveLag)){
@@ -86,7 +83,8 @@ class Main extends PluginBase implements Listener{
     }
 
     public function onBlockPlace(BlockPlaceEvent $event) {
-        $player = $event->getPlayer();
+        $player = $event->getPlayer()->getName();
+        if(!isset($this->$player)) self::setAsDefault($player);
         if(isset($this->$player->latestPlace)) $passed = microtime(true) - $this->$player->latestPlace; else{ $this->$player->latestPlace = microtime(true); $passed = 1;}
         if($this->$player->placeLag > 0 and ($passed >= 1.00/($this->$player->placeLag/10) or $this->$player->placeLag == 100)){
             if(self::randomizer($this->$player->placeLag)){
@@ -97,7 +95,8 @@ class Main extends PluginBase implements Listener{
     }
 
     public function onBlockBreak(BlockBreakEvent $event) {
-        $player = $event->getPlayer();
+        $player = $event->getPlayer()->getName();
+        if(!isset($this->$player)) self::setAsDefault($player);
         if(isset($this->$player->latestBreak)) $passed = microtime(true) - $this->$player->latestBreak; else{ $this->$player->latestBreak = microtime(true); $passed = 1;}
         if($this->$player->breakLag > 0 and ($passed >= 1.00/($this->$player->breakLag/10) or $this->$player->breakLag == 100)){
             if(self::randomizer($this->$player->breakLag)){
@@ -108,17 +107,18 @@ class Main extends PluginBase implements Listener{
     }
 
     public function openMen(Player $admin, Player $victim){
+        $victim = $victim->getName();
         $this->$admin->currentVictim = $victim;
         $form = new CustomForm(function (Player $player, $data = null) {
             if ($data === null) return true;
-            $victim = $this->$player->currentVictim;
+            $victim = $this->$player->currentVictim->getName();
             unset($this->$player->currentVictim);
             $player->sendMessage('§aSuccessfully set Lag Parameters of '.$victim->getName());
             $this->$victim->moveLag = intval($data[0]);
             $this->$victim->placeLag = intval($data[1]);
             $this->$victim->breakLag = intval($data[2]);
         });
-        $form->setTitle('Editing lag of '.$victim->getName());
+        $form->setTitle('Editing lag of '.$victim);
         $defaultMoveLag = $this->$victim->moveLag;
         $defaultPlaceLag = $this->$victim->placeLag;
         $defaultBreakLag = $this->$victim->breakLag;
@@ -128,13 +128,21 @@ class Main extends PluginBase implements Listener{
         $form->sendToPlayer($admin);
     }
 
-    public function getStick(Player $player) {
+    public function getStick(Player $player){
         $item = Item::get(Item::STICK, 0, 1)->setCustomName($this->stickName);
         $item->setNamedTagEntry(new ListTag("ench"));
         $player->getInventory()->addItem($item);
     }
 
-    public function randomizer(int $number) {
+    public function randomizer(int $number){
         if(mt_rand(0, 100) <= $number) return true; else return false;
+    }
+
+    public function setAsDefault(String $player){
+        $this->$player = new \stdClass();
+        //All attributes set here
+        $this->$player->moveLag = 0;
+        $this->$player->placeLag = 0;
+        $this->$player->breakLag = 0;
     }
 }
