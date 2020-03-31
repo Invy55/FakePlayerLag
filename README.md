@@ -9,3 +9,5 @@ This plugin permits to all the admins in your server that have access to the mai
 The command is */fpl* and the permission to use it is *FakePlayerLag.command.fpl*. This command will give you a Stick that can be used on a player to open an interface to change the values:
 
 ![Example](https://i.imgur.com/fFb1Bau.png)
+
+If you run it followed from *reset*, *r*, *0*, *remove*, *delete* it will reset your parameters (In case a staff member jokes with you .-.)
