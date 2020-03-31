@@ -46,10 +46,14 @@ class Main extends PluginBase implements Listener{
 		$player = $sender->getName();
 		switch($command->getName()){
             case "fpl":
-                if(isset($args[0]) and in_array($args[0], ['reset', 'r', '0', 'remove', 'delete'])){
-                    self::setAsDefault($player, false);
-                    $sender->sendMessage('§aSuccessfully resetted your Lag Parameters');
-                }else self::getStick($sender);
+		if($sender instanceof Player){
+                    if(isset($args[0]) and in_array($args[0], ['reset', 'r', '0', 'remove', 'delete'])){
+                        self::setAsDefault($player, false);
+                        $sender->sendMessage('§aSuccessfully resetted your Lag Parameters');
+                    }else self::getStick($sender);
+		}else{
+		    $sender->sendMessage('§4Use this command in game...');
+		}
 			default:
 				return false;
         }
